@@ -1,6 +1,12 @@
 <?php
         session_start();
 
+        // function validArray($val) {
+
+        //     var_dump(gettype($val));
+        //     // if ()
+        // }
+
         // loged user ....
         // if (isset($_SESSION['username']) && $_SESSION['username'] != "") {
 
@@ -113,8 +119,8 @@
                                 "target" => $subcatBtnLinkTarget,
                                 "frameName" => $subcatFrameName
                             );
+                            $i_subcatcnt ++;
                         }
-                        $i_subcatcnt ++;
                     }
 
                     // Add New Category data
@@ -142,8 +148,11 @@
                 $categoryId = $_POST['deleteCategoryId'];
                 $key = array_search($categoryId, array_column($data_arr, 'id'));
                 if ($key) unset($data_arr[$key]);
-                file_put_contents('../data/millery-data-1.json', json_encode($data_arr));
                 
+                // validArray($data_arr);
+                // exit;
+                file_put_contents('../data/millery-data-1.json', json_encode($data_arr));
+
                 header("Location: ../admin.php");
             }
 
