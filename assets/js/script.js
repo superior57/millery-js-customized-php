@@ -96,7 +96,7 @@ function initMillery() {
                         `;
             }
             instance.setPanelData(`
-                ${data.content}
+                ${data.content?.replaceAll("\n", "<br>")}
                 <br> ${buttonUI}          
             `);
             return true;

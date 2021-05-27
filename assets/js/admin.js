@@ -7,7 +7,7 @@ $(document).ready(function(){
                 <input name='subcatName${i}' type='text' placeholder='Sub Category' class='form-control input-md'  /> 
             </td>
             <td>
-                <input  name='subcatContent${i}' type='text' placeholder='Model Content'  class='form-control input-md'>
+                <textarea name='subcatContent${i}' rows="1" cols="30" placeholder='Model Content' class="form-control"></textarea>
             </td>
             <td>
                 <input  name='subcatBtnLink${i}' type='text' placeholder='Button Link'  class='form-control input-md'>
@@ -93,7 +93,7 @@ function handleClickAdd() {
                 <input type="text" name='subcatName0'  placeholder='Sub Category' class="form-control"/>
             </td>
             <td>
-                <input type="text" name='subcatContent0' placeholder='Model Content' class="form-control"/>
+                <textarea name='subcatContent0' rows="1" cols="30" placeholder='Model Content' class="form-control"></textarea>
             </td>
             <td>
                 <input type="text" name='subcatBtnLink0' placeholder='Button Link' class="form-control"/>
@@ -157,7 +157,7 @@ function handleClickEdit(categoryId) {
                                 <input type="text" name='subcatName${i}'  placeholder='Sub Category' class="form-control" value="${subData[i].label}"/>
                             </td>
                             <td>
-                                <input type="text" name='subcatContent${i}' placeholder='Model Content' class="form-control" value="${subData[i].content}"/>
+                                <textarea name='subcatContent${i}' rows="${subData[i].content.split("\n").length}" cols="30" placeholder='Model Content' class="form-control">${subData[i].content}</textarea>
                             </td>
                             <td>
                                 <input type="text" name='subcatBtnLink${i}' placeholder='Button Link' class="form-control" value="${subData[i].link}"/>
@@ -189,7 +189,7 @@ function handleClickEdit(categoryId) {
                             <input type="text" name='subcatName0'  placeholder='Sub Category' class="form-control"/>
                         </td>
                         <td>
-                            <input type="text" name='subcatContent0' placeholder='Model Content' class="form-control"/>
+                            <textarea name='subcatContent0' rows="1" cols="30" placeholder='Model Content' class="form-control"></textarea>
                         </td>
                         <td>
                             <input type="text" name='subcatBtnLink0' placeholder='Button Link' class="form-control"/>
