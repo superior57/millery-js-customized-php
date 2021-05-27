@@ -1,7 +1,27 @@
 $(document).ready(function(){
     $("#add_row").click(function(){
         var i= parseInt($('#subCategoryCount').val());
-        $('#item'+i).html("<td>"+ (i+1) +"</td><td><input name='subcatName"+i+"' type='text' placeholder='Sub Category' class='form-control input-md'  /> </td><td><input  name='subcatContent"+i+"' type='text' placeholder='Model Content'  class='form-control input-md'></td><td><input  name='subcatBtnLink"+i+"' type='text' placeholder='Button Link'  class='form-control input-md'></td>");
+        $('#item'+i).html(`
+            <td>${(i + 1)}</td>
+            <td>
+                <input name='subcatName${i}' type='text' placeholder='Sub Category' class='form-control input-md'  /> 
+            </td>
+            <td>
+                <input  name='subcatContent${i}' type='text' placeholder='Model Content'  class='form-control input-md'>
+            </td>
+            <td>
+                <input  name='subcatBtnLink${i}' type='text' placeholder='Button Link'  class='form-control input-md'>
+            </td>
+            <td>
+                <select class="form-control" name="subcatBtnLinkTarget${i}" onchange="handleChangeBtnTarget(event, ${i})">
+                    <option value="popup">Popup</option>
+                    <option value="_blank">New tab</option>
+                    <option value="_self">Same window</option>
+                    <option value="frame">Target frame</option>
+                </select>
+                <input type="text" name='subcatFrameName${i}' placeholder="Frame Name" class="d-none form-control mt-1">
+            </td>
+        `);
         $('#tblSubCategory').append('<tr id="item'+(i+1)+'"></tr>');
         i++; 
         $('#subCategoryCount').val(i);
@@ -34,6 +54,7 @@ $.ajax({
         
         $("#tblCategory").dataTable({
             "aaData":dataSet,
+            "pageLength": "50",
             "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
             "aoColumnDefs":[
                 {
@@ -64,22 +85,40 @@ function handleClickAdd() {
 
     $('#subCategoryWrap').empty();
     $('#subCategoryWrap').append(`
-    <tr id='item0'>
-        <td>
-            1
-        </td>
-        <td>
-            <input type="text" name='subcatName0'  placeholder='Sub Category' class="form-control"/>
-        </td>
-        <td>
-            <input type="text" name='subcatContent0' placeholder='Model Content' class="form-control"/>
-        </td>
-        <td>
-            <input type="text" name='subcatBtnLink0' placeholder='Button Link' class="form-control"/>
-        </td>
-    </tr>
-    <tr id='item1'></tr>
+        <tr id='item0'>
+            <td>
+                1
+            </td>
+            <td>
+                <input type="text" name='subcatName0'  placeholder='Sub Category' class="form-control"/>
+            </td>
+            <td>
+                <input type="text" name='subcatContent0' placeholder='Model Content' class="form-control"/>
+            </td>
+            <td>
+                <input type="text" name='subcatBtnLink0' placeholder='Button Link' class="form-control"/>
+            </td>
+            <td>
+                <select class="form-control" name="subcatBtnLinkTarget0" onchange="handleChangeBtnTarget(event, 0)">
+                    <option value="popup">Popup</option>
+                    <option value="_blank">New tab</option>
+                    <option value="_self">Same window</option>
+                    <option value="frame">Target frame</option>
+                </select>
+                <input type="text" name='subcatFrameName0' placeholder="Frame Name" class="d-none form-control mt-1">
+            </td>
+        </tr>
+        <tr id='item1'></tr>
     `)
+}
+
+function handleChangeBtnTarget(e, index) {
+    const { value } = e.target;
+    if (value === "frame") {
+        if ($(`input[name="subcatFrameName${index}"]`).hasClass('d-none')) $(`input[name="subcatFrameName${index}"]`).removeClass('d-none');
+    } else {
+        if (!$(`input[name="subcatFrameName${index}"]`).addClass('d-none')) $(`input[name="subcatFrameName${index}"]`).addClass('d-none');
+    }
 }
 
 function handleClickEdit(categoryId) {
@@ -105,6 +144,9 @@ function handleClickEdit(categoryId) {
             $('#subCategoryWrap').empty();
             if (subData.length > 0) {
                 for (let i = 0; i < subData.length; i ++) {
+                    console.log(
+                        subData[i].target === "frame"
+                    );
                     $('#subCategoryWrap').append(`
                         <tr id='item${i}'>
                             <input type="hidden" id="subcatId${i}" name="subcatId${i}" value="${subData[i].id}" />
@@ -119,6 +161,15 @@ function handleClickEdit(categoryId) {
                             </td>
                             <td>
                                 <input type="text" name='subcatBtnLink${i}' placeholder='Button Link' class="form-control" value="${subData[i].link}"/>
+                            </td>
+                            <td>
+                                <select class="form-control" name="subcatBtnLinkTarget${i}" onchange="handleChangeBtnTarget(event, ${i})">
+                                    <option value="popup" "${subData[i].target === "popup" && "selected"}>Popup</option>
+                                    <option value="_blank" ${subData[i].target === "_blank" && "selected"}>New tab</option>
+                                    <option value="_self" ${subData[i].target === "_self" && "selected"}>Same window</option>
+                                    <option value="frame" ${subData[i].target === "frame" && "selected"}>Target frame</option>
+                                </select>
+                                <input type="text" name='subcatFrameName${i}' placeholder="Frame Name" class="${subData[i].target != "frame" && "d-none"} form-control mt-1" value="${subData[i].frameName}">
                             </td>
                         </tr>
                     `);
@@ -142,6 +193,15 @@ function handleClickEdit(categoryId) {
                         </td>
                         <td>
                             <input type="text" name='subcatBtnLink0' placeholder='Button Link' class="form-control"/>
+                        </td>
+                        <td>
+                            <select class="form-control" name="subcatBtnLinkTarget0" onchange="handleChangeBtnTarget(event, 0)">
+                                <option value="popup">Popup</option>
+                                <option value="_blank">New tab</option>
+                                <option value="_self">Same window</option>
+                                <option value="frame">Target frame</option>
+                            </select>
+                            <input type="text" name='subcatFrameName0' placeholder="Frame Name" class="d-none form-control mt-1">
                         </td>
                     </tr>
                     <tr id='item1'></tr>

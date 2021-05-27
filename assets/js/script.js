@@ -5,10 +5,38 @@ $(document).ready(function() {
         panelType: "modal",
         visibleColumns: 1,
         onnodeclick: function (instance, node, data) {
+            const { target } = data;
+            let buttonUI = "";
+            switch (target) {
+                case "popup": 
+                    buttonUI = `
+                        <a 
+                            href="${data.link}" 
+                            target="${data.target}" 
+                            class="btn btn-primary mt-2"  
+                            onclick="window.open('${data.link}', 'popup', 'width=600, height=600'); return false;"
+                        >Button Link</a>  
+                        `; break;                    
+                case "frame":
+                    buttonUI = `
+                        <a 
+                            href="${data.link}" 
+                            target="${data.frameName}" 
+                            class="btn btn-primary mt-2"  
+                        >Button Link</a>  
+                        `; break;
+                default:
+                    buttonUI = `
+                        <a 
+                            href="${data.link}" 
+                            target="${data.target}" 
+                            class="btn btn-primary mt-2"
+                        >Button Link</a>  
+                        `;
+            }
             instance.setPanelData(`
                 ${data.content}
-                <br>
-                <a href="${data.link}" target="_blank" class="btn btn-primary mt-2" >Button Link</a>            
+                <br> ${buttonUI}          
             `);
             return true;
         },

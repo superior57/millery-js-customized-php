@@ -1981,7 +1981,7 @@
 }
 
 .millery-column-content.child-content .millery-node {
-  background: radial-gradient(#7697d5,#4164A4) !important;
+  /* background: radial-gradient(#7697d5,#4164A4) !important; */
 }
 .millery-column-content.child-content .millery-node .millery-text {
   flex-direction: row;

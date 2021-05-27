@@ -370,7 +370,11 @@
                 that.breadcrumbs.append("<div class='millery-breadcrumb'>" + text + "</div>");
                 if ($(this).find(".millery-node-active").hasClass('millery-node-parent')) {
                     var iconName = $('.millery-node-active').find('.millery-icon').attr('data-icon');
+                    var color = $('.millery-node-active').find('.millery-icon').attr('data-color');
+                    var iconColor = $('.millery-node-active').find('.millery-icon').attr('data-icon-color');
                     that.rootIconName = iconName;
+                    that.rootColor = color;
+                    that.rootIconColor = iconColor;
                 }
                 if ($('.millery-column-content.root-content').hasClass('child-content')) {
                     $('.millery-column-content.root-content').removeClass('child-content');                                
@@ -673,7 +677,7 @@
                                 g = parseInt(hex.substring(2,4), 16),
                                 b = parseInt(hex.substring(4,6), 16);
                         
-                            iconBackgroundColorSecondary =  'rgba('+r+','+g+','+b+','+50/100+')';
+                            iconBackgroundColorSecondary =  'rgba('+r+','+g+','+b+','+60/100+')';
                         } else {
                             iconBackgroundColorPrimary = "#aaa";
                         }
@@ -683,7 +687,7 @@
                             column.append(
                                 `<div class='millery-node ${((childrenCount > 0) ? "millery-node-parent" : "")}' data-column='${index}' data-id='${data[i][columnDef.idField]}'>
                                     <div class='millery-text'>
-                                        <div class='millery-icon' data-icon="${data[i]["icon"]}" style="background: radial-gradient(circle at bottom, ${iconBackgroundColorPrimary} 60%, ${iconBackgroundColorSecondary}); border: solid 2px ${iconBackgroundColorPrimary}">
+                                        <div class='millery-icon' data-icon="${data[i]["icon"]}" data-color="radial-gradient(90% 50%, ${iconBackgroundColorSecondary} 0%, ${iconBackgroundColorPrimary} 100%)" data-icon-color="${iconBackgroundColorPrimary}" style="background: radial-gradient(50% 80%, ${iconBackgroundColorSecondary} 0%, ${iconBackgroundColorPrimary} 100%); border: solid 2px ${iconBackgroundColorPrimary}">
                                             <i class='fa ${data[i]["icon"]}' aria-hidden='true' style='color: #FFF'></i>
                                         </div>
                                         ${columnDef.format(data[i][columnDef.labelField], data[i])}
@@ -693,10 +697,10 @@
                         } else {
                             $('.millery-column-content').addClass('child-content');
                             column.append(
-                                `<div class='millery-node ${((childrenCount > 0) ? "millery-node-parent" : "")}' data-column='${index}' data-id='${data[i][columnDef.idField]}'>
+                                `<div class='millery-node ${((childrenCount > 0) ? "millery-node-parent" : "")}' data-column='${index}' data-id='${data[i][columnDef.idField]}' style="background: ${this.rootColor}">
                                     <div class='millery-text'>
                                         <div class='millery-icon'>
-                                            <i class='fa ${this.rootIconName}' aria-hidden='true' style='color: #4164A4'></i>
+                                            <i class='fa ${this.rootIconName}' aria-hidden='true' style='color: ${this.rootIconColor}'></i>
                                         </div>
                                         ${columnDef.format(data[i][columnDef.labelField], data[i])}
                                     </div>

@@ -17,44 +17,8 @@
 </head>
 <body>
     <?php
-        session_start();
-        if (isset($_SESSION['username']) && $_SESSION['username'] != "") {
-
-            if (isset($_GET['name']) && $_GET['name'] == "getCategoryDetails") {
-                $categoryId = $_GET['id'];
-                $data = file_get_contents('data/millery-data-1.json');
-                $data_arr = json_decode($data, true);
-                $key = array_search($categoryId, array_column($data_arr, 'id'));
-
-                echo (json_encode($data_arr[$key])); exit();
-            }
-
-        } else {
-            header('Location: index.php');
-        }
-
+        include_once "router.php";
     ?>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container px-2">
-            <ul class="navbar-nav ml-auto">                
-                <?php if (isset($_SESSION['username']) && $_SESSION['username'] != "") { ?>
-                    <li class="nav-item mr-3">
-                        <a class="nav-link" href="/index.php" >Home</a>
-                    </li>
-                    <li class="nav-item mr-3">
-                        <span><?php echo $_SESSION['username'] ?></span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn btn-primary text-white" href="/logout.php">Logout</a>
-                    </li>
-                <?php } else { ?>
-                    <li class="nav-item">
-                        <a class="btn btn-danger text-white" href="#" data-toggle="modal" data-target="#exampleModal" >Login</a>
-                    </li>
-                <?php } ?>             
-            </ul>
-        </div>
-    </nav>
 
     <div class="content-wrapper pt-5">
         <div class="container">
@@ -133,10 +97,13 @@
                                                 <th class="text-center">
                                                     Button Link
                                                 </th>
+                                                <th class="text-center">
+                                                    Button Link Target
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody id="subCategoryWrap">
-                                            <tr id='item0'>
+                                            <!-- <tr id='item0'>
                                                 <td>
                                                     1
                                                 </td>
@@ -149,8 +116,17 @@
                                                 <td>
                                                     <input type="text" name='subcatBtnLink0' placeholder='Button Link' class="form-control"/>
                                                 </td>
+                                                <td>
+                                                    <select class="form-control" name="subcatBtnLinkTarget0">
+                                                        <option value="popup">Popup</option>
+                                                        <option value="_blank">New tab</option>
+                                                        <option value="_self">Same window</option>
+                                                        <option value="">Target frame</option>
+                                                    </select>
+                                                    <input type="text" name='subcatFrameName0' placeholder="Frame Name" class="form-control mt-1">
+                                                </td>
                                             </tr>
-                                            <tr id='item1'></tr>
+                                            <tr id='item1'></tr> -->
                                         </tbody>
                                     </table>
                                 </div>
@@ -196,7 +172,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/v/dt/dt-1.10.24/datatables.min.js"></script>
 
-    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/admin.js"></script>
 
 </body>
 </html>

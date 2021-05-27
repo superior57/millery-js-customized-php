@@ -2,7 +2,7 @@
         session_start();
 
         // loged user ....
-        if (isset($_SESSION['username']) && $_SESSION['username'] != "") {
+        // if (isset($_SESSION['username']) && $_SESSION['username'] != "") {
 
             // Load data from Json file.            
             $data = file_get_contents('../data/millery-data-1.json');
@@ -61,6 +61,8 @@
                             $subcatName = $_POST['subcatName'.$i];
                             $subcatContent = $_POST['subcatContent'.$i];
                             $subcatBtnLink = $_POST['subcatBtnLink'.$i];
+                            $subcatBtnLinkTarget = $_POST['subcatBtnLinkTarget'.$i];
+                            $subcatFrameName = $_POST['subcatFrameName'.$i];
 
                             if (isset($_POST['subcatId'.$i]) && $_POST['subcatId'.$i] != "") {
                                 $subcatId = $_POST['subcatId'.$i];
@@ -68,6 +70,9 @@
                                 $subData_arr[$subKey]['label'] = $subcatName;
                                 $subData_arr[$subKey]['content'] = $subcatContent;
                                 $subData_arr[$subKey]['link'] = $subcatBtnLink;
+                                $subData_arr[$subKey]['target'] = $subcatBtnLinkTarget;
+                                $subData_arr[$subKey]['frameName'] = $subcatFrameName;
+
                             } else {
                                 $subData_arr[] = array(
                                     "id" => intval($subData_arr[count($subData_arr) - 1]['id'], 10) + 1,
@@ -75,7 +80,9 @@
                                     "children" => 0,
                                     "parent" => $categoryId,
                                     "content" => $subcatContent,
-                                    "link" => $subcatBtnLink
+                                    "link" => $subcatBtnLink,
+                                    "target" => $subcatBtnLinkTarget,
+                                    "frameName" => $subcatFrameName
                                 );
                             }
                         }
@@ -93,6 +100,8 @@
                             $subcatName = $_POST['subcatName'.$i];
                             $subcatContent = $_POST['subcatContent'.$i];
                             $subcatBtnLink = $_POST['subcatBtnLink'.$i];
+                            $subcatBtnLinkTarget = $_POST['subcatBtnLinkTarget'.$i];
+                            $subcatFrameName = $_POST['subcatFrameName'.$i];
 
                             $subData_arr[] = array(
                                 "id" => intval($subData_arr[count($subData_arr) - 1]['id'], 10) + 1,
@@ -100,7 +109,9 @@
                                 "children" => 0,
                                 "parent" => $newCatId,
                                 "content" => $subcatContent,
-                                "link" => $subcatBtnLink
+                                "link" => $subcatBtnLink,
+                                "target" => $subcatBtnLinkTarget,
+                                "frameName" => $subcatFrameName
                             );
                         }
                         $i_subcatcnt ++;
@@ -123,7 +134,7 @@
                 // Write Category to Json file
                 file_put_contents('../data/millery-data-1.json', json_encode($data_arr));
 
-                header('Location: ../dashboard.php');
+                header('Location: ../admin.php');
             }
 
             // Delete Category Data
@@ -133,11 +144,11 @@
                 if ($key) unset($data_arr[$key]);
                 file_put_contents('../data/millery-data-1.json', json_encode($data_arr));
                 
-                header("Location: ../dashboard.php");
+                header("Location: ../admin.php");
             }
 
-        } else {
-            header('Location: index.php');
-        }
+        // } else {
+        //     header('Location: index.php');
+        // }
 
 ?>
