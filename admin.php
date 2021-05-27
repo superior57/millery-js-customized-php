@@ -103,30 +103,6 @@
                                             </tr>
                                         </thead>
                                         <tbody id="subCategoryWrap">
-                                            <!-- <tr id='item0'>
-                                                <td>
-                                                    1
-                                                </td>
-                                                <td>
-                                                    <input type="text" name='subcatName0'  placeholder='Sub Category' class="form-control"/>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name='subcatContent0' placeholder='Model Content' class="form-control"/>
-                                                </td>
-                                                <td>
-                                                    <input type="text" name='subcatBtnLink0' placeholder='Button Link' class="form-control"/>
-                                                </td>
-                                                <td>
-                                                    <select class="form-control" name="subcatBtnLinkTarget0">
-                                                        <option value="popup">Popup</option>
-                                                        <option value="_blank">New tab</option>
-                                                        <option value="_self">Same window</option>
-                                                        <option value="">Target frame</option>
-                                                    </select>
-                                                    <input type="text" name='subcatFrameName0' placeholder="Frame Name" class="form-control mt-1">
-                                                </td>
-                                            </tr>
-                                            <tr id='item1'></tr> -->
                                         </tbody>
                                     </table>
                                 </div>

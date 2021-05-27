@@ -1,6 +1,65 @@
-$(document).ready(function() {
-    console.log("ready");
 
+var state = {
+    categories: [],
+    subCategories: []
+};
+$(document).ready(function() {    
+    // initMillery();
+});
+
+
+setInterval(() => {
+    var tempState = {
+        categories: '',
+        subCategories: ''
+    };
+    $.get('/data/millery-data-1.json', (categories) => {
+        tempState.categories = categories;   
+        $.get('/data/millery-data-2.json', (subCategories) => {
+            tempState.subCategories = subCategories;          
+            let is_updated_cat = false, is_updated_subcat = false;
+            // Detect Category updates
+            tempState.categories.forEach((cat, c_i) => {
+                if (is_updated_cat) return;
+                let keys = Object.keys(cat);
+                keys.forEach(key => {
+                    if (!state.categories[c_i]) {
+                        is_updated_cat = true;
+                        return;
+                    }
+                    if (cat[key] != state.categories[c_i][key]) {
+                        is_updated_cat = true;
+                        return;
+                    }
+                })
+            });
+            if (!is_updated_cat) {
+                // Detect Sub Category updates
+                tempState.subCategories.forEach((cat, c_i) => {
+                    if (is_updated_subcat) return;
+                    let keys = Object.keys(cat);
+                    keys.forEach(key => {
+                        if (!state.subCategories[c_i]) {
+                            is_updated_subcat = true;
+                            return;
+                        }
+                        if (cat[key] != state.subCategories[c_i][key]) {
+                            is_updated_subcat = true;
+                            return;
+                        }
+                    })
+                });
+            }            
+            if ( is_updated_cat || is_updated_subcat ) {
+                state = {...tempState};
+                initMillery();
+            }               
+        });
+    });
+}, 1000);
+
+function initMillery() {
+    $("#millery").empty();
     $("#millery").millery({
         panelType: "modal",
         visibleColumns: 1,
@@ -14,7 +73,7 @@ $(document).ready(function() {
                             href="${data.link}" 
                             target="${data.target}" 
                             class="btn btn-primary mt-2"  
-                            onclick="window.open('${data.link}', 'popup', 'width=600, height=600'); return false;"
+                            onclick="popupApps('${data.link}')"
                         >Button Link</a>  
                         `; break;                    
                 case "frame":
@@ -80,4 +139,19 @@ $(document).ready(function() {
             }
         }]
     });
-})
+}
+
+function popupApps(link) {
+    // window.open('${data.link}', 'popup', 'width=600, height=600'); return false;
+
+    var popup = window.open(link, "popup", "fullscreen");
+    if (popup.outerWidth < screen.availWidth || popup.outerHeight < screen.availHeight)
+    {
+        popup.moveTo(0,0);
+        popup.resizeTo(screen.availWidth, screen.availHeight);
+    }
+    if (navigator.userAgent.match(/Edge\/\d+/g))
+    {
+        return window.open(link, "popup", "width=" + screen.width + ",height=" + screen.height);
+    }
+}
