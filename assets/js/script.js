@@ -3,6 +3,8 @@ var state = {
     categories: [],
     subCategories: []
 };
+// var serverURL = "http://localhost:8002";
+var serverURL = "https://quiet-badlands-43803.herokuapp.com/";
 $(document).ready(function() {    
     // initMillery();
 });
@@ -102,7 +104,7 @@ function initMillery() {
         columns: [{
             header: "NETWORKS",
             sourceType: "json",
-            source: "/data/millery-data-1.json",
+            source: serverURL + "/data/millery-data-1.json",
             idField: "id",
             parentIdField: null,
             labelField: "label",
@@ -115,7 +117,7 @@ function initMillery() {
         {
             header: "Second Column",
             sourceType: "json",
-            source: "/data/millery-data-2.json",
+            source: serverURL + "/data/millery-data-2.json",
             idField: "id",
             parentIdField: "parent",
             childrenCountField: "children",
