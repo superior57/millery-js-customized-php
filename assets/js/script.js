@@ -2,15 +2,8 @@ var state = {
     categories: [],
     subCategories: []
 };
-<<<<<<< HEAD
 $(document).ready(function() {
     initMillery();
-=======
-var serverURL = "http://localhost:8002";
-// var serverURL = "https://quiet-badlands-43803.herokuapp.com";
-$(document).ready(function() {    
-    // initMillery();
->>>>>>> cac1610228568df2dea55ece5d744b1635174143
 });
 
 
