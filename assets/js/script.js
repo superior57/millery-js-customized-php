@@ -56,7 +56,7 @@ setInterval(() => {
             }
         });
     });
-}, 1000);
+}, 500);
 
 function initMillery() {
     $("#millery").empty();
