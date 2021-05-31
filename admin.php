@@ -16,10 +16,6 @@
     <link rel="stylesheet" href="assets/css/style.scss">
 </head>
 <body>
-    <?php
-        include_once "router.php";
-    ?>
-
     <div class="content-wrapper pt-5">
         <div class="container">
             <div class="row clearfix">
@@ -148,6 +144,10 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/v/dt/dt-1.10.24/datatables.min.js"></script>
 
+    <!-- Config JS -->
+    <script src="config.js"></script>
+
+    <!-- Main JS -->
     <script src="assets/js/admin.js"></script>
 
 </body>

@@ -40,7 +40,7 @@ $(document).ready(function(){
 });
 
 $.ajax({
-    url: "/data/millery-data-1.json",
+    url: serverURL + "/data/millery-data-1.json",
     method: "get",
     dataType: "json",
     success: (data) => {
@@ -122,9 +122,8 @@ function handleChangeBtnTarget(e, index) {
 }
 
 function handleClickEdit(categoryId) {
-    console.log(categoryId);
     $.ajax({
-        url: "/src/edit.php",
+        url: serverURL + "/src/edit.php",
         method: 'get',
         dataType: 'json',
         data: {

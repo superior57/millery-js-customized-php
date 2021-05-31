@@ -16,7 +16,7 @@
 </head>
 <body>
     <?php
-        include_once "router.php";
+            
     ?>
 
     <div class="content-wrapper pt-5">
@@ -35,10 +35,13 @@
    
 
     <!-- millery includes -->
-    <link href="assets/millery/build/css/millery.min.css" rel="stylesheet"/>
+    <link href="assets/millery/css/millery.min.css" rel="stylesheet"/>
     <!-- <script src="assets/millery/build/js/millery.min.js"></script> -->
     <script src="assets/millery/js/millery.js"></script>
     <!-- end millery includes -->
+
+    <!-- Config JS -->
+    <script src="config.js"></script>
 
     <!-- Main JS -->
     <script src="assets/js/script.js"></script>

@@ -1,12 +1,16 @@
-
 var state = {
     categories: [],
     subCategories: []
 };
+<<<<<<< HEAD
+$(document).ready(function() {
+    initMillery();
+=======
 var serverURL = "http://localhost:8002";
 // var serverURL = "https://quiet-badlands-43803.herokuapp.com";
 $(document).ready(function() {    
     // initMillery();
+>>>>>>> cac1610228568df2dea55ece5d744b1635174143
 });
 
 
@@ -15,11 +19,12 @@ setInterval(() => {
         categories: '',
         subCategories: ''
     };
-    $.get('/data/millery-data-1.json', (categories) => {
-        tempState.categories = categories;   
-        $.get('/data/millery-data-2.json', (subCategories) => {
-            tempState.subCategories = subCategories;          
-            let is_updated_cat = false, is_updated_subcat = false;
+    $.get(serverURL + '/data/millery-data-1.json', (categories) => {
+        tempState.categories = categories;
+        $.get(serverURL + '/data/millery-data-2.json', (subCategories) => {
+            tempState.subCategories = subCategories;
+            let is_updated_cat = false,
+                is_updated_subcat = false;
             // Detect Category updates
             tempState.categories.forEach((cat, c_i) => {
                 if (is_updated_cat) return;
@@ -51,11 +56,11 @@ setInterval(() => {
                         }
                     })
                 });
-            }            
-            if ( is_updated_cat || is_updated_subcat ) {
-                state = {...tempState};
+            }
+            if (is_updated_cat || is_updated_subcat) {
+                state = {...tempState };
                 initMillery();
-            }               
+            }
         });
     });
 }, 1000);
@@ -65,11 +70,11 @@ function initMillery() {
     $("#millery").millery({
         panelType: "modal",
         visibleColumns: 1,
-        onnodeclick: function (instance, node, data) {
+        onnodeclick: function(instance, node, data) {
             const { target } = data;
             let buttonUI = "";
             switch (target) {
-                case "popup": 
+                case "popup":
                     buttonUI = `
                         <a 
                             href="${data.link}" 
@@ -77,7 +82,8 @@ function initMillery() {
                             class="btn btn-primary mt-2"  
                             onclick="popupApps('${data.link}')"
                         >Button Link</a>  
-                        `; break;                    
+                        `;
+                    break;
                 case "frame":
                     buttonUI = `
                         <a 
@@ -85,7 +91,8 @@ function initMillery() {
                             target="${data.frameName}" 
                             class="btn btn-primary mt-2"  
                         >Button Link</a>  
-                        `; break;
+                        `;
+                    break;
                 default:
                     buttonUI = `
                         <a 
@@ -102,44 +109,32 @@ function initMillery() {
             return true;
         },
         columns: [{
-            header: "NETWORKS",
-            sourceType: "json",
-            source: serverURL + "/data/millery-data-1.json",
-            idField: "id",
-            parentIdField: null,
-            labelField: "label",
-            searchParam: "query",
-            childrenCountField: "children",
-            format: function (value, obj) {
-                return value;
+                header: "NETWORKS",
+                sourceType: "json",
+                source: serverURL + "/data/millery-data-1.json",
+                idField: "id",
+                parentIdField: null,
+                labelField: "label",
+                searchParam: "query",
+                childrenCountField: "children",
+                format: function(value, obj) {
+                    return value;
+                }
+            },
+            {
+                header: "Second Column",
+                sourceType: "json",
+                source: serverURL + "/data/millery-data-2.json",
+                idField: "id",
+                parentIdField: "parent",
+                childrenCountField: "children",
+                labelField: "label",
+                searchParam: "query",
+                format: function(value, obj) {
+                    return value;
+                }
             }
-        },
-        {
-            header: "Second Column",
-            sourceType: "json",
-            source: serverURL + "/data/millery-data-2.json",
-            idField: "id",
-            parentIdField: "parent",
-            childrenCountField: "children",
-            labelField: "label",
-            searchParam: "query",
-            format: function (value, obj) {
-                return value;
-            }
-        },
-        {
-            header: "Third Column",
-            sourceType: "json",
-            source: "/data/millery-data-3.json",
-            idField: "id",
-            parentIdField: "parent",
-            childrenCountField: "children",
-            labelField: "label",
-            searchParam: "query",
-            format: function (value, obj) {
-                return value;
-            }
-        }]
+        ]
     });
 }
 
@@ -147,13 +142,11 @@ function popupApps(link) {
     // window.open('${data.link}', 'popup', 'width=600, height=600'); return false;
 
     var popup = window.open(link, "popup", "fullscreen");
-    if (popup.outerWidth < screen.availWidth || popup.outerHeight < screen.availHeight)
-    {
-        popup.moveTo(0,0);
+    if (popup.outerWidth < screen.availWidth || popup.outerHeight < screen.availHeight) {
+        popup.moveTo(0, 0);
         popup.resizeTo(screen.availWidth, screen.availHeight);
     }
-    if (navigator.userAgent.match(/Edge\/\d+/g))
-    {
+    if (navigator.userAgent.match(/Edge\/\d+/g)) {
         return window.open(link, "popup", "width=" + screen.width + ",height=" + screen.height);
     }
 }

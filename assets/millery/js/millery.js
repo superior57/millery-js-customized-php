@@ -45,12 +45,12 @@
  * $(".selector").millery({options});
  */
 ;
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
     /**
      *  The main millery class
      *  @class millery
      */
-    var millery = function (elem, options) {
+    var millery = function(elem, options) {
         this.elem = elem;
         this.$elem = $(elem);
         this.options = options;
@@ -64,10 +64,10 @@
         /////////////////////////////////////////////////////////////////////
         // public properties that can be set through plugin initialization //
         /////////////////////////////////////////////////////////////////////
-        public: function () {
+        public: function() {
             return {
                 source: null, // the source UL element to be converted to miller columns
-                visibleColumns: 3,  // visible columns on the table
+                visibleColumns: 3, // visible columns on the table
                 panelWidth: "75%", // the width of the panel (overlay modal)
                 panelType: null, // "overlay", "always", "modal" or null/invalid input, defines the details view type
                 transitionDuration: 100, // the animation duration when opening the modal, transitioning between columns etc.
@@ -80,19 +80,19 @@
                 searchLabel: "Search...", // the label for the search input placeholder
                 backButtonLabel: "Back", // the label for the back button
                 closeButtonLabel: "Close", // the label for the close panel button
-                onbeforeinit: function (instance) { }, // event which fires before initialization occurs
-                oninit: function (instance) { }, // event which fires after initialization
-                onnodeclick: function (instance, node) { return true; }, // event which fires on node click
-                onbeforeappend: function (instance, column, data) { return true; }, // event which fires before new column is appended, can be prevented
-                onafterappend: function (instance, column, data) { }, // event which fires after the column is appended
-                onbeforepanelclose: function (instance, panel) { return true; },// event which fires before the panel closes, can be prevented
-                onafterpanelclose: function (instance, panel) { }, // event which fires after the panel is closed
-                onbeforepanelopen: function (instance, panel) { return true; }, // event which fires before the panel opens, can be prevented
-                onafterpanelopen: function (instance, panel) { },// event which fires after the panel is opened
-                onbeforeremove: function (instance, columns) { return true; }, // event which fires before the column is removed (for layout change), can be prevented
-                onafterremove: function (instance) { }, // event which fires after the column is removed
-                onbackbutton: function (instance) { return true; }, // event which fires before back button action is executed, can be prevented
-                onbreadcrumb: function (instance, breadcrumb) { return true; }, // event which fires after the breadcrumb link is clicked
+                onbeforeinit: function(instance) {}, // event which fires before initialization occurs
+                oninit: function(instance) {}, // event which fires after initialization
+                onnodeclick: function(instance, node) { return true; }, // event which fires on node click
+                onbeforeappend: function(instance, column, data) { return true; }, // event which fires before new column is appended, can be prevented
+                onafterappend: function(instance, column, data) {}, // event which fires after the column is appended
+                onbeforepanelclose: function(instance, panel) { return true; }, // event which fires before the panel closes, can be prevented
+                onafterpanelclose: function(instance, panel) {}, // event which fires after the panel is closed
+                onbeforepanelopen: function(instance, panel) { return true; }, // event which fires before the panel opens, can be prevented
+                onafterpanelopen: function(instance, panel) {}, // event which fires after the panel is opened
+                onbeforeremove: function(instance, columns) { return true; }, // event which fires before the column is removed (for layout change), can be prevented
+                onafterremove: function(instance) {}, // event which fires after the column is removed
+                onbackbutton: function(instance) { return true; }, // event which fires before back button action is executed, can be prevented
+                onbreadcrumb: function(instance, breadcrumb) { return true; }, // event which fires after the breadcrumb link is clicked
                 columns: [],
                 /**
                  * Column Definition:
@@ -120,7 +120,7 @@
         //////////////////////////////////////////
         // private variables for internal usage //
         //////////////////////////////////////////
-        private: function () {
+        private: function() {
             return {
                 panelTypes: ["always", "modal", "overlay"],
                 scrollHandler: null,
@@ -138,10 +138,10 @@
          * initialize the plugin
          * @return millery object
          */
-        init: function () {
+        init: function() {
             this.config = $.extend(true, {}, this.public(), this.options, this.metadata);
             this.globals = $.extend(true, {}, this.private());
-            if(this.config.debug) console.time("init " + this.elem.id);
+            if (this.config.debug) console.time("init " + this.elem.id);
             this.fixColumnsConfig();
             if (this.config.stateSaveId === null) this.config.stateSaveId = this.elem.id;
             $("body").addClass(this.checkTouch() ? "millery-touch" : "millery-notouch");
@@ -150,16 +150,16 @@
             this.drawUserInterface();
             this.attachEvents();
             this.initStorage(this.config.stateSaveId);
-            this.loadData(0, null, null).then($.proxy(function () {
+            this.loadData(0, null, null).then($.proxy(function() {
                 this.addKeyboardNavigation();
             }, this));
             this.container.data("millery", this);
             this.config.oninit(this);
             this.elem.millery = this;
-            if(this.config.debug) console.timeEnd("init " + this.elem.id);
+            if (this.config.debug) console.timeEnd("init " + this.elem.id);
             return this;
         },
-        fixColumnsConfig: function(){
+        fixColumnsConfig: function() {
             var columnDefaults = {
                 header: "[Not Defined]",
                 sourceType: "json",
@@ -168,14 +168,12 @@
                 paginated: false,
                 pageCount: null,
                 labelField: null,
-                format: function(value, obj){ return value; }
+                format: function(value, obj) { return value; }
             };
 
-            for(var i = 0, len = this.config.columns.length; i < len; i++)
-            {
-                for(var key in columnDefaults)
-                {
-                    if(this.config.columns[i].hasOwnProperty(key) == false) this.config.columns[i][key] = columnDefaults[key];
+            for (var i = 0, len = this.config.columns.length; i < len; i++) {
+                for (var key in columnDefaults) {
+                    if (this.config.columns[i].hasOwnProperty(key) == false) this.config.columns[i][key] = columnDefaults[key];
                 }
             }
 
@@ -184,7 +182,7 @@
          * Draws the plugin interface
          * @return void
          */
-        drawUserInterface: function () {
+        drawUserInterface: function() {
             this.container = $([
                 "<div class='millery-container",
                 this.config.panel == "always" ? " millery-panel-open" : "",
@@ -199,7 +197,8 @@
                 "<div class='millery-columns' style='flex: 1;'></div>",
                 "<div class='millery-panel'>&nbsp;</div>",
                 "</div>",
-                "</div>"].join("")).appendTo(this.$elem);
+                "</div>"
+            ].join("")).appendTo(this.$elem);
             this.columnscontainer = this.container.find(".millery-columns");
             this.toppart = this.container.find(".millery-top");
             this.backbutton = this.toppart.find(".millery-back-button");
@@ -231,7 +230,7 @@
          * Appends a column to the container
          * @return {object} appended column's content section
          */
-        appendColumnUL: function (rootNode) {
+        appendColumnUL: function(rootNode) {
             var dfd = $.Deferred();
 
             // var text = $(this).find(".millery-node-active").first().text();
@@ -250,22 +249,20 @@
                         rootNode[0].getAttribute("data-title") +
                         "</div>" : ""),
                     (this.config.columnSearch ? "<div class='millery-column-search'><span class='icon'><i class='fa fa-search'></i></span><input type='search' placeholder='" + this.config.searchLabel + "'></div>" : ""),
-                    "<div class='millery-column-content'></div></div></div>"].join(""));
+                    "<div class='millery-column-content'></div></div></div>"
+                ].join(""));
 
             if (this.config.onbeforeappend(this, columnElement, null) == true) {
-                columnElement.appendTo(this.columnscontainer).animate(
-                    {
-                        left: "0"
-                    },
-                    {
-                        duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
-                        complete: $.proxy(function () {
-                            dfd.resolve();
-                            this.setBackButtonStatus();
-                            this.config.onafterappend(this, columnElement, null);
-                        }, this)
-                    }
-                );
+                columnElement.appendTo(this.columnscontainer).animate({
+                    left: "0"
+                }, {
+                    duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
+                    complete: $.proxy(function() {
+                        dfd.resolve();
+                        this.setBackButtonStatus();
+                        this.config.onafterappend(this, columnElement, null);
+                    }, this)
+                });
                 return [dfd, columnElement.find(".millery-column-content")];
             } else {
                 dfd.resolve();
@@ -276,7 +273,7 @@
          * Appends a column to the container
          * @return {object} appended column's content section
          */
-        appendColumn: function (columnDef) {
+        appendColumn: function(columnDef) {
             var dfd = $.Deferred();
             var i = this.columnscontainer.find(".millery-column").length,
                 columnElement = $([
@@ -288,26 +285,24 @@
                     this.config.visibleColumns,
                     ");'><div class='millery-column-wrapper'>",
                     (this.config.showHeaders ? "<div class='millery-column-header'>" + (
-                        typeof (columnDef.header) == "function" ?
-                            columnDef.header(this.columnscontainer.find(".millery-node-active").last().data("millery-data")) :
-                            columnDef.header) + "</div>" : ""),
+                        typeof(columnDef.header) == "function" ?
+                        columnDef.header(this.columnscontainer.find(".millery-node-active").last().data("millery-data")) :
+                        columnDef.header) + "</div>" : ""),
                     (this.config.columnSearch ? "<div class='millery-column-search'><span class='icon'><i class='fa fa-search'></i></span><input type='search' placeholder='" + this.config.searchLabel + "'></div>" : ""),
-                    "<div class='millery-column-content'></div></div></div>"].join(""));
+                    "<div class='millery-column-content'></div></div></div>"
+                ].join(""));
 
             if (this.config.onbeforeappend(this, columnElement, columnDef) == true) {
-                columnElement.appendTo(this.columnscontainer).animate(
-                    {
-                        left: "0"
-                    },
-                    {
-                        duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
-                        complete: $.proxy(function () {
-                            dfd.resolve();
-                            this.setBackButtonStatus();
-                            this.config.onafterappend(this, columnElement, columnDef);
-                        }, this)
-                    }
-                );
+                columnElement.appendTo(this.columnscontainer).animate({
+                    left: "0"
+                }, {
+                    duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
+                    complete: $.proxy(function() {
+                        dfd.resolve();
+                        this.setBackButtonStatus();
+                        this.config.onafterappend(this, columnElement, columnDef);
+                    }, this)
+                });
                 return [dfd, columnElement.find(".millery-column-content")];
             } else {
                 dfd.resolve();
@@ -318,24 +313,24 @@
          * Removes the columns after the defined index
          * @return void
          */
-        removeColumn: function (i) {
+        removeColumn: function(i) {
             var dfd = $.Deferred();
             var columnsToRemove = this.columnscontainer.find(".millery-column").eq(i - 1).nextAll(".millery-column");
             if (columnsToRemove.length > 0) {
                 totalWidths = 0;
-                columnsToRemove.map(function () {
+                columnsToRemove.map(function() {
                     totalWidths += $(this).outerWidth();
                 });
                 if (this.config.onbeforeremove(this, columnsToRemove) == true) {
                     columnsToRemove.animate({
                         marginLeft: (-99.99999 / this.config.visibleColumns) + "%",
                     }, {
-                            duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
-                            complete: function () {
-                                columnsToRemove.remove();
-                                dfd.resolve();
-                            }
-                        });
+                        duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
+                        complete: function() {
+                            columnsToRemove.remove();
+                            dfd.resolve();
+                        }
+                    });
                     this.config.onafterremove(this);
                 } else {
                     dfd.resolve();
@@ -344,7 +339,7 @@
             }
             return dfd.resolve();
         },
-        clearColumns: function () {
+        clearColumns: function() {
             this.columnscontainer.empty();
             this.globals.currentIndex = -1;
         },
@@ -352,20 +347,20 @@
          * According to the column count, enables or disables the back button.
          * @return void
          */
-        setBackButtonStatus: function () {
+        setBackButtonStatus: function() {
             if (this.columnscontainer.find(".millery-column").length == 1) {
                 this.backbutton.attr("disabled", "disabled");
             } else {
                 this.backbutton.removeAttr("disabled");
             }
         },
-        setPanelData: function (data) {
+        setPanelData: function(data) {
             this.panel.html(data);
         },
-        setBreadcrumbs: function () {
+        setBreadcrumbs: function() {
             var that = this;
             this.breadcrumbs.empty();
-            this.columnscontainer.find(".millery-column").each(function () {
+            this.columnscontainer.find(".millery-column").each(function() {
                 var text = $(this).find(".millery-node-active").first().text();
                 that.breadcrumbs.append("<div class='millery-breadcrumb'>" + text + "</div>");
                 if ($(this).find(".millery-node-active").hasClass('millery-node-parent')) {
@@ -377,14 +372,14 @@
                     that.rootIconColor = iconColor;
                 }
                 if ($('.millery-column-content.root-content').hasClass('child-content')) {
-                    $('.millery-column-content.root-content').removeClass('child-content');                                
+                    $('.millery-column-content.root-content').removeClass('child-content');
                 }
                 if ($('.millery-column-content').length == 1) {
                     $('.millery-column-header').text(that.config.columns[0]?.header);
                 }
             });
         },
-        openPanel: function () {
+        openPanel: function() {
             if (this.config.panelType !== null && this.config.panelType !== "always") {
                 if (this.config.onbeforepanelopen(this, this.panel) == true) {
                     this.container.addClass("millery-panel-open");
@@ -394,7 +389,7 @@
                 }
             }
         },
-        closePanel: function () {
+        closePanel: function() {
             if (this.config.panelType !== null && this.config.panelType !== "always") {
                 if (this.config.onbeforepanelclose(this, this.panel) == true) {
                     this.container.removeClass("millery-panel-open");
@@ -408,8 +403,8 @@
          * Attaches the related events on the elements after render/update
          * @return void
          */
-        attachEvents: function () {
-            $(document).off("click.millery").on("click.millery", ".millery-node", function (e) {
+        attachEvents: function() {
+            $(document).off("click.millery").on("click.millery", ".millery-node", function(e) {
 
                 var $this = $(this);
                 // get millery instance
@@ -438,7 +433,7 @@
                 currentColumn.find(".millery-node").removeClass("millery-node-active");
                 $this.addClass("millery-node-active");
 
-                instance.removeColumn(currentColumnIndex + 1).done(function () {
+                instance.removeColumn(currentColumnIndex + 1).done(function() {
                     // load data if is expandable
                     if (instance.config.onnodeclick(instance, $this, $this.data("millery-data"), e) == true) {
                         if ($this.hasClass("millery-node-parent")) {
@@ -455,11 +450,11 @@
                 return false;
             });
 
-            this.backbutton.on("click.millery", function () {
+            this.backbutton.on("click.millery", function() {
                 var instance = $(this).parents(".millery-container").first().data("millery");
                 var currentIndex = instance.globals.currentIndex;
                 if (currentIndex > 0 && instance.config.onbackbutton(this) == true) {
-                    instance.removeColumn(currentIndex).then(function () {
+                    instance.removeColumn(currentIndex).then(function() {
                         instance.setBreadcrumbs();
                         instance.popStorage();
                         instance.setBackButtonStatus();
@@ -469,10 +464,10 @@
                 return false;
             });
 
-            $(window).off("resize.millery").on("resize.millery", function () {
+            $(window).off("resize.millery").on("resize.millery", function() {
                 if (window.milleryResizeTimeout) clearTimeout(window.milleryResizeTimeout);
-                window.milleryResizeTimeout = setTimeout(function () {
-                    $(".millery-container").each(function () {
+                window.milleryResizeTimeout = setTimeout(function() {
+                    $(".millery-container").each(function() {
                         $(this).addClass("millery-no-transition");
                         var instance = $(this).data("millery");
                         var buffer = instance.config.transitionDuration;
@@ -485,7 +480,7 @@
                 return false;
             });
 
-            $(document).off("click.millerybreadcrumb").on("click.millerybreadcrumb", ".millery-breadcrumb", function () {
+            $(document).off("click.millerybreadcrumb").on("click.millerybreadcrumb", ".millery-breadcrumb", function() {
                 var $this = $(this);
                 var instance = $this.parents(".millery-container").first().data("millery");
                 var allColumns = $this.parents(".millery-breadcrumbs").find(".millery-breadcrumb");
@@ -493,18 +488,18 @@
                 if (currentColumnIndex == allColumns.length - 1) return false;
                 if (instance.container.hasClass("millery-panel-open")) instance.closePanel();
                 if (instance.config.onbreadcrumb(instance, $this) == true) {
-                    instance.removeColumn(currentColumnIndex + 1).then(function () {
+                    instance.removeColumn(currentColumnIndex + 1).then(function() {
                         instance.setBreadcrumbs();
                         instance.scrollToIndex(currentColumnIndex);
                     });
                 }
             });
 
-            $(document).on("input.millery", ".millery-column-search input", function () {
+            $(document).on("input.millery", ".millery-column-search input", function() {
                 var $this = $(this);
                 var regex = new RegExp($this.val(), "i");
                 var nodes = $this.parent(".millery-column-search").next(".millery-column-content").find(".millery-node");
-                nodes.each(function () {
+                nodes.each(function() {
                     var $node = $(this);
                     if (!regex.test($node.text()) && $node.hasClass("millery-node-active") == false) {
                         $node.hide();
@@ -514,12 +509,12 @@
                 });
             });
 
-            if(this.config.searchable == true){
-                this.searchInput.on("input.millery", function () {
+            if (this.config.searchable == true) {
+                this.searchInput.on("input.millery", function() {
                     var $this = $(this);
                     var instance = $this.parents(".millery-container").first().data("millery");
                     if (instance.globals.ajaxTimeout) clearTimeout(instance.globals.ajaxTimeout);
-                    instance.globals.ajaxTimeout = setTimeout($.proxy(function () {
+                    instance.globals.ajaxTimeout = setTimeout($.proxy(function() {
                         this.clearColumns();
                         this.loadData(0, null, null);
                     }, instance), 500);
@@ -535,7 +530,7 @@
          * @param {*} param
          * @param {*} data
          */
-        appendQuery: function (url, param, data) {
+        appendQuery: function(url, param, data) {
             return url + (url.indexOf("?") > 0 ? "&" : "?") + param + "=" + data;
         },
         /**
@@ -545,17 +540,8 @@
          * @param {*} obj
          * @param {*} query
          */
-        loadData: function (index, id, obj) {
+        loadData: function(index, id, obj) {
             var query = this.config.searchable ? this.searchInput.val() : "";
-
-            $.ajax({
-                url: "/assets/millery/config/colors.json",
-                method: "get",
-                dataType: "json",
-                success: (data) => {
-                    this.config.iconColors = data;
-                }
-            })
 
             if (this.config.source != null) {
                 $(this.config.source).hide();
@@ -579,10 +565,10 @@
             } else {
                 if (this.config.columns[index]) {
                     var columnDef = this.config.columns[index],
-                        sourceUrl = columnDef.hasOwnProperty("formatUrl") && typeof (columnDef.formatUrl) == "function" ? columnDef.formatUrl(columnDef.source, obj) : columnDef.source;
-                    if (this.config.searchable && query.trim() !== ""){
-                        if(columnDef.hasOwnProperty("searchUrl")){
-                            sourceUrl = columnDef.hasOwnProperty("formatUrl") && typeof (columnDef.formatUrl) == "function" ? columnDef.formatUrl(columnDef.searchUrl, obj) : columnDef.searchUrl;
+                        sourceUrl = columnDef.hasOwnProperty("formatUrl") && typeof(columnDef.formatUrl) == "function" ? columnDef.formatUrl(columnDef.source, obj) : columnDef.source;
+                    if (this.config.searchable && query.trim() !== "") {
+                        if (columnDef.hasOwnProperty("searchUrl")) {
+                            sourceUrl = columnDef.hasOwnProperty("formatUrl") && typeof(columnDef.formatUrl) == "function" ? columnDef.formatUrl(columnDef.searchUrl, obj) : columnDef.searchUrl;
                         }
                         sourceUrl = this.appendQuery(sourceUrl, columnDef.searchParam, query);
                     }
@@ -592,31 +578,30 @@
                         dataType: 'json',
                         crossDomain: true,
                         success: $.proxy(
-                        function (data) {
-                            this.appendData(id, index, data, columnDef);
-                        }, this)
+                            function(data) {
+                                this.appendData(id, index, data, columnDef);
+                            }, this)
                     });
                 }
             }
         },
-        appendData: function (id, index, data, columnDef) {
+        appendData: function(id, index, data, columnDef) {
             this.setBreadcrumbs();
             var buffer = this.appendColumn(columnDef),
                 column = buffer[1],
                 dfd = buffer[0];
-            var colors = this.config.iconColors;            
 
-            $.when(dfd).then($.proxy(function () {
+            $.when(dfd).then($.proxy(function() {
                 if (columnDef.hasOwnProperty("loopPath") && columnDef.loopPath != false) {
                     data = this.getPath(data, columnDef.loopPath);
                 }
                 for (var i = 0; i < data.length; i++) {
                     var childrenCount = (columnDef.hasOwnProperty("childrenCountField") ?
-                    (
-                        typeof (columnDef.childrenCountField) == "function" ?
+                        (
+                            typeof(columnDef.childrenCountField) == "function" ?
                             columnDef.childrenCountField(data[i]) :
                             data[i][columnDef.childrenCountField]
-                    ) : 0);
+                        ) : 0);
 
                     /**
                      * check the first column state
@@ -654,8 +639,7 @@
                      */
                     var skipChecks = columnDef.hasOwnProperty("dontCheckParent") && columnDef.dontCheckParent === true;
 
-                    if (rootChecks || leafChecks || skipChecks)
-                    {
+                    if (rootChecks || leafChecks || skipChecks) {
                         // column.append("<div class='millery-node" +
                         //     ((childrenCount > 0) ? " millery-node-parent" : "") +
                         //     "' data-column='" + index + "' data-id='" +
@@ -663,21 +647,21 @@
                         //     ((childrenCount > 0) ? "<div class='millery-node-more'><i class='fa fa-chevron-right'></i></div>" : "") +
                         //     "</div>");
 
-                        let iconBackgroundColorPrimary = colors[data[i]["iconColor"]] ? colors[data[i]["iconColor"]] : data[i]["iconColor"];
+                        let iconBackgroundColorPrimary = data[i]["iconColor"];
                         let iconBackgroundColorSecondary = "white";
 
-                        if ( iconBackgroundColorPrimary ) {
-                            var hex = iconBackgroundColorPrimary.replace('#','');
-                    
+                        if (iconBackgroundColorPrimary) {
+                            var hex = iconBackgroundColorPrimary.replace('#', '');
+
                             if (hex.length === 3) {
                                 hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
                             }
-                        
-                            var r = parseInt(hex.substring(0,2), 16),
-                                g = parseInt(hex.substring(2,4), 16),
-                                b = parseInt(hex.substring(4,6), 16);
-                        
-                            iconBackgroundColorSecondary =  'rgba('+r+','+g+','+b+','+60/100+')';
+
+                            var r = parseInt(hex.substring(0, 2), 16),
+                                g = parseInt(hex.substring(2, 4), 16),
+                                b = parseInt(hex.substring(4, 6), 16);
+
+                            iconBackgroundColorSecondary = 'rgba(' + r + ',' + g + ',' + b + ',' + 60 / 100 + ')';
                         } else {
                             iconBackgroundColorPrimary = "#aaa";
                         }
@@ -706,7 +690,7 @@
                                     </div>
                                 </div>`
                             );
-                        }                     
+                        }
                         var lastNode = column.find(".millery-node").last();
                         lastNode.data("millery-data", data[i]);
                         if (this.config.keepState && this.globals.walkFinished == false && this.globals.storageData[index] !== undefined && data[i][columnDef.idField] == this.globals.storageData[index]) lastNode.click();
@@ -720,14 +704,14 @@
                 var text = $(".millery-breadcrumb").text();
                 if (text) {
                     $('.millery-column-header').text(text);
-                }               
+                }
             }, this));
         },
-        appendDataUL: function (root, index) {
+        appendDataUL: function(root, index) {
             var buffer = this.appendColumnUL(root),
                 column = buffer[1],
                 dfd = buffer[0];
-            $.when(dfd).then($.proxy(function () {
+            $.when(dfd).then($.proxy(function() {
                 for (var i = 0; i < root.children("li").length; i++) {
                     var node = root.children("li:eq(" + i + ")");
                     var childrenCount = node.children("ul").length;
@@ -749,12 +733,12 @@
                 this.scrollToIndex(index);
             }, this));
         },
-        getText: function (node) {
+        getText: function(node) {
             return node.clone().children().remove().end().text();
         },
-        addKeyboardNavigation: function () {
+        addKeyboardNavigation: function() {
             if (this.config.enableKeyboard) {
-                var keyDownEvent = $.proxy(function (event) {
+                var keyDownEvent = $.proxy(function(event) {
 
                     if ($(document.activeElement).prop("name") === "millery-search-input") return true;
 
@@ -795,7 +779,7 @@
                         case 39: // right
                             if (this.globals.keyboardSelectedNode.hasClass("millery-node-parent")) {
                                 this.globals.keyboardSelectedNode.click();
-                                this.globals.clickEventFinished.then($.proxy(function () {
+                                this.globals.clickEventFinished.then($.proxy(function() {
                                     var newColumn = this.columnscontainer.find(".millery-column").last();
                                     newnode = newColumn.find(".millery-node").first();
                                     this.globals.keyboardSelectedNode = newnode;
@@ -818,7 +802,7 @@
                             if (this.globals.keyboardSelectedNode) this.globals.keyboardSelectedNode.click();
                             return false;
                         case 27: // esc
-                            if(this.closebutton.is(":visible")) this.closebutton.click();
+                            if (this.closebutton.is(":visible")) this.closebutton.click();
                             else this.backbutton.click();
                             this.container.focus();
                             return false;
@@ -834,8 +818,8 @@
                 this.container.off("keydown.millery").on("keydown.millery", keyDownEvent);
             }
         },
-        scrollToIndex: function (index) {
-            this.requestAnimFrame($.proxy(function () {
+        scrollToIndex: function(index) {
+            this.requestAnimFrame($.proxy(function() {
                 var container = this.columnscontainer;
                 var columns = container.find(".millery-column");
                 var element = columns.eq(index - 1);
@@ -843,20 +827,20 @@
                     container.animate({
                         scrollLeft: element.offset().left + element.outerWidth() - container.offset().left + container.scrollLeft() + 1
                     }, {
-                            duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
-                            easing: 'swing',
-                            complete: $.proxy(function () {
-                                this.globals.currentIndex = index;
-                            }, this)
-                        });
+                        duration: this.globals.walkFinished == false ? 0 : this.config.transitionDuration,
+                        easing: 'swing',
+                        complete: $.proxy(function() {
+                            this.globals.currentIndex = index;
+                        }, this)
+                    });
                 }
             }, this));
         },
-        initStorage: function (stateId) {
+        initStorage: function(stateId) {
             this.globals.storageData = JSON.parse(window.localStorage.getItem(this.config.stateSaveId));
             if (this.globals.storageData === null) this.globals.storageData = [];
         },
-        setStorage: function (level, value) {
+        setStorage: function(level, value) {
             var newData = [];
             for (var i = 0; i < level; i++) {
                 newData[i] = this.globals.storageData[i];
@@ -865,12 +849,12 @@
             this.globals.storageData = newData;
             window.localStorage.setItem(this.config.stateSaveId, JSON.stringify(this.globals.storageData));
         },
-        popStorage: function () {
+        popStorage: function() {
             var p = this.globals.storageData.pop();
             window.localStorage.setItem(this.config.stateSaveId, JSON.stringify(this.globals.storageData));
             return p;
         },
-        getBrowserAnimationEvent: function () {
+        getBrowserAnimationEvent: function() {
             var t, el = document.createElement("fakeelement");
             var animations = {
                 "animation": "animationend",
@@ -884,11 +868,12 @@
                 }
             }
         },
-        getPath: function (scope, str) {
-            var obj = scope, arr;
+        getPath: function(scope, str) {
+            var obj = scope,
+                arr;
             try {
-                arr = str.split(/[\[\]\.]/).filter(function (el) { return el; }).map(function (el) { return el.replace(/^['"]+|['"]+$/g, ''); });
-                arr.forEach(function (el) { obj = obj[el]; });
+                arr = str.split(/[\[\]\.]/).filter(function(el) { return el; }).map(function(el) { return el.replace(/^['"]+|['"]+$/g, ''); });
+                arr.forEach(function(el) { obj = obj[el]; });
             } catch (e) {
                 obj = undefined;
             }
@@ -897,7 +882,7 @@
         /**
          * javascript rAF implementation for cross browser compatibility
          */
-        requestAnimFrame: function (callback) {
+        requestAnimFrame: function(callback) {
             if (typeof window.requestAnimationFrame === "function") return requestAnimationFrame(callback);
             if (typeof window.webkitRequestAnimationFrame === "function") return webkitRequestAnimationFrame(callback);
             if (typeof window.mozRequestAnimationFrame === "function") return mozRequestAnimationFrame(callback);
@@ -906,7 +891,7 @@
         /**
          * javascript cAF implementation for cross browser compatibility
          */
-        cancelAnimFrame: function (id) {
+        cancelAnimFrame: function(id) {
             if (typeof window.cancelAnimationFrame === "function") return cancelAnimationFrame(id);
             if (typeof window.webkitCancelAnimationFrame === "function") return webkitCancelAnimationFrame(id);
             if (typeof window.mozCancelAnimationFrame === "function") return mozCancelAnimationFrame(id);
@@ -915,12 +900,12 @@
         /**
          * Destroys the instance
          */
-        destroy: function () {
+        destroy: function() {
 
         },
-        checkTouch: function () {
+        checkTouch: function() {
             var prefixes = ' -webkit- -moz- -o- -ms- '.split(' ');
-            var mq = function (query) {
+            var mq = function(query) {
                 return window.matchMedia(query).matches;
             };
 
@@ -940,8 +925,8 @@
      * @param   {object}    options javascript object which contains element specific or range specific options
      * @return  {millery}   plugin reference
      */
-    $.fn.millery = function (options) {
-        return this.each(function () {
+    $.fn.millery = function(options) {
+        return this.each(function() {
             new millery(this, options).init();
         });
     };
